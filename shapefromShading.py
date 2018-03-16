@@ -54,26 +54,38 @@ def rad_calc(p,q,s,imgSize,selected):
 	#cv2.drawContours(im,contours,-1,(0,255,0),3)
 
 # initialization points for p,q
-def init_pq(imgSize,radiance):
-	boundary = np.zeros((imgSize,imgSize))
-	roi  = radiance > 0
-	contours = measure.find_contours(roi, 0.0)
-	a,b = contours[0][2]
-	print roi[int(a-1)][int(b-1)]
+#Caluculates E_x, E_y
+# Calcualtes boundary
+# Calculates p_init and q_init
+# returns both
+def init_pq(imgSize, radiance):
+    boundary = np.zeros((imgSize, imgSize))
 
-	'''
-	# Display the image and plot all contours found
-	fig, ax = plt.subplots()
-	ax.imshow(roi, interpolation='nearest', cmap=plt.cm.gray)
+    #calculate E_x and E_y to intialize
+    E_x = radiance;
+    E_y = radiance;
+    E_x[:,2:(imgSize-1)] = E_x[:,3:imgSize] - E_x[:,1:(imgSize-2)];
+    E_y[:,2:(imgSize-1)] = E_y[:,3:imgSize] - E_y[:,1:(imgSize-2)];
 
-	for n,contour in enumerate(contours):
-	    ax.plot(contour[:, 1], contour[:, 0], linewidth=2)
+    boundary = feature.canny(radiance);
+    p_init = E_x*boundary;
+    q_init = E_y*boundary;
 
-	ax.axis('image')
-	ax.set_xticks([])
-	ax.set_yticks([])
-	plt.show()
-	'''
+
+    # # Display the image and plot all contours found
+    # fig, ax = plt.subplots()
+    # ax.imshow(p_init, interpolation='nearest', cmap=plt.cm.gray)
+    # for n,contour in enumerate(contours):
+    #     ax.plot(contour[:, 1], contour[:, 0], linewidth=2)
+    # ax.axis('image')
+    # ax.set_xticks([])
+    # ax.set_yticks([])
+    # plt.show()
+    #
+
+    return p_init,q_init
+
+
 
 
 def rad2pq(radiance,p,q,s,roi,lamda,N):
