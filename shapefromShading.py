@@ -1,7 +1,7 @@
 # for part 0) assuming object to be sphere at z0 and source at (1,0,0). Hence we know depth and s^ vector.
 
 import numpy as np
-import pylab as plt
+#import pylab as plt
 #import cv2
 import matplotlib.pyplot as plt
 
@@ -57,20 +57,23 @@ def rad_calc(p,q,s,imgSize,selected):
 def init_pq(imgSize,radiance):
 	boundary = np.zeros((imgSize,imgSize))
 	roi  = radiance > 0
-	contours = measure.find_contours(roi, 0.5)
-	print roi, contours
+	contours = measure.find_contours(roi, 0.0)
+	a,b = contours[0][2]
+	print roi[int(a-1)][int(b-1)]
 
+	'''
 	# Display the image and plot all contours found
-	#fig, ax = plt.subplots()
-	#ax.imshow(roi, interpolation='nearest', cmap=plt.cm.gray)
+	fig, ax = plt.subplots()
+	ax.imshow(roi, interpolation='nearest', cmap=plt.cm.gray)
 
-	#for n, contour in enumerate(contours):
-	#    ax.plot(contour[:, 1], contour[:, 0], linewidth=2)
+	for n,contour in enumerate(contours):
+	    ax.plot(contour[:, 1], contour[:, 0], linewidth=2)
 
-	#ax.axis('image')
-	#ax.set_xticks([])
-	#ax.set_yticks([])
-	#plt.show()
+	ax.axis('image')
+	ax.set_xticks([])
+	ax.set_yticks([])
+	plt.show()
+	'''
 
 
 def rad2pq(radiance,p,q,s,roi,lamda,N):
