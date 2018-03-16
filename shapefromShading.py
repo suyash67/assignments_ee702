@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 
 #from skimage import measure
 from skimage import filter
+from skimage.morphology import erosion, dilation
+
 # generation of sphere
 # calculation of depth : z^2 = r^2 - x^2 -y^2
 def depth_calc(r,imgSize):
