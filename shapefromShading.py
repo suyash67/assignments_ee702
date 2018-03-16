@@ -64,7 +64,13 @@ def init_pq(imgSize, radiance):
 	E_x[:,1:-1] = 0.5*(E_x[:,2:] - E_x[:,:-2])
 	E_y[1:-1,:] = 0.5*(E_y[2:,:] - E_y[:-2,:])
 
-	boundary = filter.canny(radiance);
+# 	boundary = filter.canny(radiance);
+	# Replacing with Erosion and Dilation
+    	roiRad = radiance > 0;
+    	kernel = np.ones([3, 3]);
+    	boundary = roiRad - erosion(roiRad, kernel);
+    	boundary = erosion(dilation(boundary, kernel), kernel);
+
 	p_init = E_x*boundary;
 	q_init = E_y*boundary;
 
